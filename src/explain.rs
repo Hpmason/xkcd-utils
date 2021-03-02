@@ -4,7 +4,7 @@ use std::{collections::HashMap};
 use serde::{Serialize, Deserialize};
 use async_trait::async_trait;
 
-use crate::{error::XKCDError, xkcd::XKCD};
+use crate::{comic::Comic, error::XKCDError, xkcd::XKCD};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct ExplainXKCD {
@@ -65,7 +65,10 @@ impl XKCD<Self> for ExplainXKCD {
         Ok(ex_parse.into_explain_xkcd())
     }
     async fn get_home() -> Result<Self, XKCDError> {
-        let url = Self::BASE_URL;
+        // Get current comic number from www.xkcd.com
+        let com = Comic::get_home().await?;
+        // Use the current comic number to get the explainxkcd from the explainxkcd api
+        let url = format!("{}{}", Self::BASE_URL, com.num);
         let ex = Self::get(url).await?;
         Ok(ex)
     }
