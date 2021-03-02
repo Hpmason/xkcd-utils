@@ -48,10 +48,8 @@ impl XKCD<Self> for Comic {
     async fn get<S: ToString + Send>(url: S) -> Result<Self, XKCDError> {
         let url = url.to_string();
         println!("Getting {}", url);
-        let comic = reqwest::get(&url).await
-            .unwrap()
-            .json::<Comic>()
-            .await?;
+        let comic = reqwest::get(&url).await?
+            .json::<Comic>().await?;
         Ok(comic)
     }
 
