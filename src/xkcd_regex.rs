@@ -57,8 +57,7 @@ impl MarkdownConverter {
             // Unable to find single squares outside of Explanation section
             return XKCDMarkdown::Plain(matches.as_str().to_string());
         }
-        return XKCDMarkdown::End;
-
+        XKCDMarkdown::End
     }
     
     pub fn from_xkcd(s: &str) -> Self {
@@ -71,7 +70,7 @@ impl MarkdownConverter {
 
     fn explain_capture(cap: Captures) -> XKCDMarkdown {
         if let Some(matches) = cap.name("square") {
-            let split = matches.as_str().split("|").collect::<Vec<_>>();
+            let split = matches.as_str().split('|').collect::<Vec<_>>();
             
             // If len is 1, then it is an internal link where the content is the same as the link suffix
             if split.len() == 1 {
@@ -91,7 +90,7 @@ impl MarkdownConverter {
             }
         }
         else if let Some(matches) = cap.name("curly") {
-            let split = matches.as_str().split("|").collect::<Vec<_>>();
+            let split = matches.as_str().split('|').collect::<Vec<_>>();
             // If curly brackers have 2 items, this it is most linkly an external link
             if split.len() == 2 {
                 // If content before | is w, then it is an external wikipedia link
@@ -128,14 +127,14 @@ impl MarkdownConverter {
             // Unable to find single squares outside of Explanation section
             return XKCDMarkdown::Li(matches.as_str().len() as u32);
         }
-        else if let Some(_) = cap.name("br") {
+        else if cap.name("br").is_some() {
             // Unable to find single squares outside of Explanation section
             return XKCDMarkdown::Br;
         }
         else if let Some(matches) = cap.name("plain") {
             return XKCDMarkdown::Plain(matches.as_str().to_string());
         }
-        return XKCDMarkdown::End;
+        XKCDMarkdown::End
     }
 
     pub fn from_explain(s: &str) -> Self {

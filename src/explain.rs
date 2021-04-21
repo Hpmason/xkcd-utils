@@ -36,11 +36,11 @@ struct ExplainRequest {
 impl ExplainParse {
     fn into_explain_xkcd(self) -> ExplainXKCD {
         let num = self.redirects[0].from.parse().unwrap();
-        let mut split = self.title.split(":");
+        let mut split = self.title.split(':');
         // Clear id number
         split.next();
         ExplainXKCD {
-            num: num,
+            num,
             title: split.next().unwrap().to_string(),
             explanation: self.wikitext.get("*").unwrap().to_owned(),
             permalink: format!("https://www.explainxkcd.com/wiki/index.php/{}", num),
